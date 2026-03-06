@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Products</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .order-container { max-width: 600px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
+    .order-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .order-table th, .order-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    .order-table th { background: #f0f0f0; }
+    .order-btn { background: #333; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+    .order-btn:active { background: #555; }
+  </style>
+</head>
+<body>
+  <div class="order-container">
+    <h2>Order Products</h2>
+    <% if (error) { %>
+      <div style="color:red;"> <strong>Error:</strong> <%= error %> </div>
+    <% } else if (products && products.length) { %>
+      <form id="orderForm">
+        <table class="order-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% products.forEach(p => { %>
+              <tr>
+                <td><%= p.name %></td>
+                <td>$<%= p.price %></td>
+                <td><input type="number" name="quantity_<%= p.id %>" min="0" value="0" style="width:60px;"></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <button type="submit" class="order-btn">Place Order</button>
+      </form>
+      <div id="orderResult"></div>
+    <% } else { %>
+      <p>No products available for order.</p>
+    <% } %>
+  </div>
+  <script>
+    document.getElementById('orderForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      let result = 'Order placed! (Demo only, no backend)';
+      document.getElementById('orderResult').innerText = result;
+    });
+  </script>
+</body>
+</html>

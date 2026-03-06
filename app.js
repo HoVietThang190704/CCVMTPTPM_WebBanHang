@@ -11,7 +11,9 @@ app.use(express.static(__dirname + '/public'));  // public directory remains at 
 
 // routes
 const homeRouter = require('./src/routes/home');
+const orderRouter = require('./src/routes/order');
 app.use('/', homeRouter);
+app.use('/', orderRouter);
 
 // ensure tables exist (code‑first approach)
 const { init } = require('./src/initDb');

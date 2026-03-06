@@ -15,7 +15,7 @@
   </header>
 
   <main>
-    <% if (error) { %>
+    <% if (typeof error !== 'undefined' && error) { %>
       <div style="color:red;">
         <strong>Error:</strong> <%= error %>
       </div>
