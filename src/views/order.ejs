@@ -5,53 +5,143 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Products</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    .order-container { max-width: 600px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
-    .order-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    .order-table th, .order-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-    .order-table th { background: #f0f0f0; }
-    .order-btn { background: #333; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
-    .order-btn:active { background: #555; }
+    .order-container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: linear-gradient(135deg, #fff 70%, #e0e7ff 100%);
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px #0002;
+      animation: fadeIn 1s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .order-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .order-header i {
+      color: #4f46e5;
+      font-size: 2rem;
+    }
+    .order-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background: #fafafa;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .order-table th, .order-table td {
+      border: 1px solid #e0e0e0;
+      padding: 12px;
+      text-align: center;
+    }
+    .order-table th {
+      background: #6366f1;
+      color: #fff;
+      font-weight: 600;
+    }
+    .order-table tr:hover {
+      background: #e0e7ff;
+      transition: background 0.2s;
+    }
+    .order-btn {
+      background: linear-gradient(90deg, #6366f1 60%, #4f46e5 100%);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px #6366f133;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+    .order-btn:hover {
+      background: #4f46e5;
+    }
+    .order-total {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 16px;
+      text-align: right;
+    }
+    @media (max-width: 600px) {
+      .order-container { padding: 8px; }
+      .order-table th, .order-table td { padding: 6px; }
+      .order-btn { padding: 8px 12px; font-size: 1rem; }
+    }
   </style>
 </head>
 <body>
   <div class="order-container">
-    <h2>Order Products</h2>
-    <% if (error) { %>
+    <div class="order-header">
+      <i class="fa fa-cart-plus"></i>
+      <h2>Đặt hàng sản phẩm</h2>
+      <a href="/add-product" class="order-btn" style="margin-left:auto;display:flex;align-items:center;gap:6px;background:#22c55e;">
+        <i class="fa fa-plus"></i> Thêm sản phẩm mới
+      </a>
+    </div>
+    <% if (typeof error !== 'undefined' && error) { %>
       <div style="color:red;"> <strong>Error:</strong> <%= error %> </div>
-    <% } else if (products && products.length) { %>
+    <% } else if (typeof products !== 'undefined' && products.length) { %>
       <form id="orderForm">
+        <div class="order-total" id="orderTotal">Tổng tiền: 0₫</div>
         <table class="order-table">
           <thead>
             <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Quantity</th>
+              <th>Sản phẩm</th>
+              <th>Giá</th>
+              <th>Số lượng</th>
             </tr>
           </thead>
           <tbody>
             <% products.forEach(p => { %>
               <tr>
-                <td><%= p.name %></td>
-                <td>$<%= p.price %></td>
-                <td><input type="number" name="quantity_<%= p.id %>" min="0" value="0" style="width:60px;"></td>
+                <td><i class="fa fa-box"></i> <%= p.name %></td>
+                <td><%= p.price.toLocaleString() %>₫</td>
+                <td><input type="number" name="quantity_<%= p.id %>" min="0" value="0" style="width:60px;" class="quantity-input" data-price="<%= p.price %>"></td>
               </tr>
             <% }) %>
           </tbody>
         </table>
-        <button type="submit" class="order-btn">Place Order</button>
+        <button type="submit" class="order-btn"><i class="fa fa-paper-plane"></i> Đặt hàng</button>
       </form>
       <div id="orderResult"></div>
     <% } else { %>
-      <p>No products available for order.</p>
+      <p>Không có sản phẩm nào để đặt hàng.</p>
     <% } %>
   </div>
   <script>
+    // Tính tổng tiền khi thay đổi số lượng
+    function updateTotal() {
+      let total = 0;
+      document.querySelectorAll('.quantity-input').forEach(input => {
+        const price = parseFloat(input.dataset.price);
+        const qty = parseInt(input.value) || 0;
+        total += price * qty;
+      });
+      document.getElementById('orderTotal').innerText = 'Tổng tiền: ' + total.toLocaleString() + '₫';
+    }
+    document.querySelectorAll('.quantity-input').forEach(input => {
+      input.addEventListener('input', updateTotal);
+    });
     document.getElementById('orderForm')?.addEventListener('submit', function(e) {
       e.preventDefault();
-      let result = 'Order placed! (Demo only, no backend)';
+      let result = 'Đặt hàng thành công! (Demo, chưa lưu backend)';
       document.getElementById('orderResult').innerText = result;
+      document.getElementById('orderResult').style.color = '#4f46e5';
     });
+    updateTotal();
   </script>
 </body>
 </html>
