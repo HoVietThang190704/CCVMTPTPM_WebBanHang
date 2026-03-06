@@ -13,7 +13,18 @@ app.use(express.static(__dirname + '/public'));  // public directory remains at 
 const homeRouter = require('./src/routes/home');
 app.use('/', homeRouter);
 
+// ensure tables exist (code‑first approach)
+const { init } = require('./src/initDb');
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+init()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('failed to initialize database', err);
+    process.exit(1);
+  });
