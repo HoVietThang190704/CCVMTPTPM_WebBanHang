@@ -9,9 +9,15 @@ app.set('views', __dirname + '/src/views');
 // static files
 app.use(express.static(__dirname + '/public'));  // public directory remains at project root
 
+// body parsing middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 // routes
 const homeRouter = require('./src/routes/home');
+const productRouter = require('./src/routes/products');
 app.use('/', homeRouter);
+app.use('/products', productRouter);
 
 const categoryRoutes = require('./src/routes/category');
 app.use('/category', categoryRoutes);
