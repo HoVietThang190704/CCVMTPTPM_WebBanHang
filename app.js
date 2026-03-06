@@ -15,9 +15,15 @@ app.use(express.json());
 
 // routes
 const homeRouter = require('./src/routes/home');
+const authRouter = require('./src/routes/auth');
+app.use('/', homeRouter);
+app.use('/auth', authRouter);
 const productRouter = require('./src/routes/products');
 app.use('/', homeRouter);
 app.use('/products', productRouter);
+
+const categoryRoutes = require('./src/routes/category');
+app.use('/category', categoryRoutes);
 
 // ensure tables exist (code‑first approach)
 const { init } = require('./src/initDb');
