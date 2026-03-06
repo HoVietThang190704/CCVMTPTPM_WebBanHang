@@ -83,6 +83,10 @@
         <button class="order-btn">Đặt hàng</button>
     </div>
     <script>
+        // Thông báo khi đặt hàng thành công
+        document.querySelector('.order-btn').addEventListener('click', function() {
+            alert('Cảm ơn bạn đã đặt hàng! Đơn hàng của bạn đã được ghi nhận.');
+        });
         // Tính tổng tiền động khi thay đổi số lượng
         const rows = document.querySelectorAll('.order-table tbody tr');
         const totalEl = document.getElementById('total');
