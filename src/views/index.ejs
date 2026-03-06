@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ban Hang MVC</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Welcome to Shop</h1>
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <% if (error) { %>
+      <div style="color:red;">
+        <strong>Error:</strong> <%= error %>
+      </div>
+      <p>Make sure the MySQL database exists and connection settings are correct.</p>
+    <% } else if (typeof products !== 'undefined' && products.length) { %>
+      <h2>Products</h2>
+      <ul>
+        <% products.forEach(p => { %>
+          <li><%= p.name %> - $<%= p.price %></li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>This is a basic MVC template using Node.js, Express, HTML and CSS.</p>
+    <% } %>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 My Shop</p>
+  </footer>
+</body>
+</html>
