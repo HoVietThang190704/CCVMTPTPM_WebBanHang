@@ -19,6 +19,9 @@ const productRouter = require('./src/routes/products');
 app.use('/', homeRouter);
 app.use('/products', productRouter);
 
+const categoryRoutes = require('./src/routes/category');
+app.use('/category', categoryRoutes);
+
 // ensure tables exist (code‑first approach)
 const { init } = require('./src/initDb');
 
