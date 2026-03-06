@@ -37,7 +37,7 @@
           <% products.forEach(p => { %>
             <tr>
               <td><%= p.id %></td>
-              <td><%= p.name %></td>
+              <td><a href="/products/<%= p.id %>"><%= p.name %></a></td>
               <td><%= Number(p.price).toLocaleString('vi-VN') %> đ</td>
               <td><%= new Date(p.created_at).toLocaleDateString('vi-VN') %></td>
             </tr>
